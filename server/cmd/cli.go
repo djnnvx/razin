@@ -70,8 +70,8 @@ func LoadServerCLI(opts *CliOptions) *cobra.Command {
 	defaults := CliDefaults()
 
 	cmd.PersistentFlags().BoolVarP(&defaults.DebugEnabled, "debug", "d", false, "enable debug trace")
-	cmd.PersistentFlags().IntVarP(&defaults.Lport, "port", "p", 4444, "default listening port")
-	cmd.PersistentFlags().StringVarP(&defaults.AesKey, "key", "k", defaults.AesKey, "default AES key for communications")
+	cmd.PersistentFlags().IntVarP(&defaults.Lport, "port", "p", 4444, "server listening port")
+	cmd.PersistentFlags().StringVarP(&defaults.AesKey, "key", "k", defaults.AesKey, "AES key for communications")
 
 	return cmd
 }

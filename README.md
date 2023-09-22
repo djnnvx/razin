@@ -42,7 +42,7 @@ Usage:
 Flags:
   -d, --debug        enable debug trace
   -h, --help         help for server
-  -k, --key string   default AES key for communications (default "RAZINrazinRAZINrazinRAZINrazinRAZINraz")
-  -p, --port int     default listening port (default 4444)
+  -k, --key string   AES key for communications (default "RAZINrazinRAZINrazinRAZINrazinRAZINraz")
+  -p, --port int     server listening port (default 4444)
   -v, --version      version for server
 ```
