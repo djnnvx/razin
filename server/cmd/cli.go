@@ -29,7 +29,9 @@ func CliDefaults() *CliOptions {
 	}
 }
 
-func LoadServerCLI(opts *CliOptions) *cobra.Command {
+func LoadServerCLI() *cobra.Command {
+
+	opts := CliDefaults()
 
 	version := "0.0.1"
 	var cmd = &cobra.Command{
@@ -40,7 +42,7 @@ func LoadServerCLI(opts *CliOptions) *cobra.Command {
 		Long:               "Command-and-control server for AES-over-TCP implants",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			if opts.DebugEnabled {
+			if opts.DebugEnabled == true {
 				fmt.Println("[~] Setting up server...")
 			}
 
@@ -67,11 +69,9 @@ func LoadServerCLI(opts *CliOptions) *cobra.Command {
 		},
 	}
 
-	defaults := CliDefaults()
-
-	cmd.PersistentFlags().BoolVarP(&defaults.DebugEnabled, "debug", "d", false, "enable debug trace")
-	cmd.PersistentFlags().IntVarP(&defaults.Lport, "port", "p", 4444, "server listening port")
-	cmd.PersistentFlags().StringVarP(&defaults.AesKey, "key", "k", defaults.AesKey, "AES key for communications")
+	cmd.PersistentFlags().BoolVarP(&opts.DebugEnabled, "debug", "d", false, "enable debug trace")
+	cmd.PersistentFlags().IntVarP(&opts.Lport, "port", "p", 4444, "server listening port")
+	cmd.PersistentFlags().StringVarP(&opts.AesKey, "key", "k", opts.AesKey, "AES key for communications")
 
 	return cmd
 }

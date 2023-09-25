@@ -36,7 +36,9 @@ func CliDefaults() *CliOptions {
 	}
 }
 
-func LoadServerCLI(opts *CliOptions) *cobra.Command {
+func LoadClientCLI() *cobra.Command {
+
+	opts := CliDefaults()
 
 	version := "0.0.1"
 	var cmd = &cobra.Command{
@@ -86,12 +88,10 @@ func LoadServerCLI(opts *CliOptions) *cobra.Command {
 		},
 	}
 
-	defaults := CliDefaults()
-
-	cmd.PersistentFlags().BoolVarP(&defaults.DebugEnabled, "debug", "d", false, "enable debug trace")
-	cmd.PersistentFlags().IntVarP(&defaults.Port, "port", "p", 4444, "callback port")
-	cmd.PersistentFlags().StringVarP(&defaults.Address, "address", "a", defaults.Address, "callback address")
-	cmd.PersistentFlags().StringVarP(&defaults.AesKey, "key", "k", defaults.AesKey, "default AES key for communications")
+	cmd.PersistentFlags().BoolVarP(&opts.DebugEnabled, "debug", "d", false, "enable debug trace")
+	cmd.PersistentFlags().IntVarP(&opts.Port, "port", "p", 4444, "callback port")
+	cmd.PersistentFlags().StringVarP(&opts.Address, "address", "a", opts.Address, "callback address")
+	cmd.PersistentFlags().StringVarP(&opts.AesKey, "key", "k", opts.AesKey, "default AES key for communications")
 
 	return cmd
 }
