@@ -10,54 +10,54 @@ import (
 )
 
 /*
-   Will emulate _ls_ command and return the output as a string
+Will emulate _ls_ command and return the output as a string
 */
 func ExecLs(dirPath string) (string, error) {
 
-    var output []string
+	var output []string
 
-    /* Read directory */
-    files, err := os.ReadDir(dirPath); if err != nil {
-        return "", err
-    }
+	/* Read directory */
+	files, err := os.ReadDir(dirPath)
+	if err != nil {
+		return "", err
+	}
 
-    /* Iterate over files & directory */
-    for _, f := range files {
+	/* Iterate over files & directory */
+	for _, f := range files {
 
-        if f.IsDir() {
+		/* retrieve file info & get output string */
+		fInfo, err := f.Info()
+		if err != nil {
+			return "", err
+		}
 
-            /* retrieve file info & get output string */
-            fInfo, err := f.Info()
-            if err != nil {
-                return "", err
-            }
+		/* retrieve file permissions */
+		var owner *windows.SID
+		var secDesc windows.Handle
 
-            /* retrieve file permissions */
-            var owner *windows.SID
-            var secDesc windows.Handle
+		_ = acl.GetNamedSecurityInfo(
+			f.Name(),
+			acl.SE_FILE_OBJECT,
+			acl.OWNER_SECURITY_INFORMATION,
+			&owner,
+			nil,
+			nil,
+			nil,
+			&secDesc,
+		)
+		defer windows.LocalFree(secDesc)
 
-            _ = acl.GetNamedSecurityInfo(
-                f,
-                acl.SE_FILE_OBJECT,
-                acl.OWNER_SECURITY_INFORMATION,
-                &owner,
-                nil,
-                nil,
-                nil,
-                &secDesc,
-            );
-            defer windows.LocalFree(secDesc)
+		sOwner := owner.String()
 
+		if f.IsDir() {
+			file_out := fmt.Sprintf("%s Dir  %v %v %s", sOwner, fInfo.Size(), fInfo.ModTime(), f.Name())
+			output = append(output, file_out)
 
-            file_out := fmt.Sprintf("%v || Dir || %v || %v", fInfo.Size(), fInfo.ModTime(), f.Name())
-            file_out := fmt.Sprintf("%s", )
-            output = append(output, file_out)
-        } else {
+		} else {
+			file_out := fmt.Sprintf("%s File  %v %v %s", sOwner, fInfo.Size(), fInfo.ModTime(), f.Name())
+			output = append(output, file_out)
+		}
+	}
 
-
-
-        }
-    }
-
-    return strings.Join(output, "\n"), nil
+	return strings.Join(output, "\n"), nil
 }

