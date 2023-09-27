@@ -68,7 +68,7 @@ func LoadClientCLI() *cobra.Command {
 				}
 
 				out, _ := ExecuteCommand(decrypted, opts)
-                fmt.Fprint(conn, aes.EncryptAes(out, opts.AesKey)+"\n")
+				fmt.Fprint(conn, aes.EncryptAes(out, opts.AesKey)+"\n")
 			}
 		},
 	}

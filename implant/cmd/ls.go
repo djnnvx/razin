@@ -24,10 +24,10 @@ func ExecLs(dirPath string) (string, error) {
 			return "", err
 		}
 
-        file_out := fmt.Sprintf(
-            "%v %v (%v) %s", fInfo.Mode(), fInfo.ModTime(), fInfo.Size(), f.Name(),
-        )
-        output = append(output, file_out)
+		file_out := fmt.Sprintf(
+			"%v %v (%v) %s", fInfo.Mode(), fInfo.ModTime(), fInfo.Size(), f.Name(),
+		)
+		output = append(output, file_out)
 	}
 
 	return strings.Join(output, "\n") + "\n", nil
