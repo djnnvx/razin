@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -25,13 +26,41 @@ func ExecuteCommand(input string, opts *CliOptions) (string, error) {
 		return ExecLs(args)
 	}
 
-    if input == "whoami" {
-        user, err := user.Current()
-        if err != nil {
-            return "", err
-        }
-        return user.Username, err
-    }
+	if input == "whoami" {
+		user, err := user.Current()
+		if err != nil {
+			return "", err
+		}
+		return user.Username, err
+	}
+
+	if strings.HasPrefix(input, "cat") || strings.HasPrefix(input, "less") {
+		toRead := strings.SplitN(input, " ", 2)
+
+		if len(toRead) == 2 {
+			file, err := os.Open(toRead[1])
+			if err != nil {
+				return "", err
+			}
+			defer file.Close()
+
+			buffer := make([]byte, 2048)
+			var out string
+
+			for {
+				n, err := file.Read(buffer)
+				if err != nil {
+					break
+				}
+
+				out += string(buffer[:n])
+			}
+			return out, nil
+
+		} else {
+			return "", errors.New("no such file")
+		}
+	}
 
 	if opts.DebugEnabled {
 		fmt.Printf("[+] Executing powershell.exe with dirpath: %s\n", input)
