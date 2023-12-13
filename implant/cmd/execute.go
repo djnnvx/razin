@@ -26,6 +26,10 @@ func ExecuteCommand(input string, opts *CliOptions) (string, error) {
 		return ExecLs(args)
 	}
 
+    if input == "getpid" {
+        return fmt.Sprintf("%d\n", os.Getpid()), nil
+    }
+
 	if input == "whoami" {
 		user, err := user.Current()
 		if err != nil {
